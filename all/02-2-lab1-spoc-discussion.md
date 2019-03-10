@@ -22,24 +22,49 @@
 ### 启动顺序
 
 1. x86段寄存器的字段含义和功能有哪些？
+- CS:Code Segment
+- DS:Data Segment
+- ES:Extra Segment
+- SS:Stack Segment
+
 2. x86描述符特权级DPL、当前特权级CPL和请求特权级RPL的含义是什么？在哪些寄存器中存在这些字段？对应的访问条件是什么？
+- CPL: Curerent Privilege Level, in CS selector.
+- DPL: Descriptor Privilege Level, in segment description.
+- RPL: Requested Privilege Level, in CS selector.
+
+Access: DPL>=max{CPL, RPL}
+
 3. 分析可执行文件格式elf的格式（无需回答）
+
 
 ### 4.1 C函数调用的实现
 
 ### 4.2 x86中断处理过程
 
 1. x86/RV中断处理中硬件压栈内容？用户态中断和内核态中断的硬件压栈有什么不同？
+
+eflags, cs, eip, errorcode.
+用户态压栈同时还会压SS和ESP。
+
 2. 为什么在用户态的中断响应要使用内核堆栈？
+
+用户栈不可信，必须使用内核栈保证安全。
+
 3. x86中trap类型的中断门与interrupt类型的中断门有啥设置上的差别？如果在设置中断门上不做区分，会有什么可能的后果?
+
+特权等级的差别；防止用户随意触发中断。
 
 ### 4.3 练习四和五 ucore内核映像加载和函数调用栈分析
 
 1. ucore中，在kdebug.c文件中用到的函数`read_ebp`是内联的，而函数`read_eip`不是内联的。为什么要设计成这样？
 
+ebp不能导致原有ebp被破坏，但是eip需要一个新的栈帧来读取“返回地址”作为eip。
+
 ### 4.4 练习六 完善中断初始化和处理
 
 1. CPU加电初始化后中断是使能的吗？为什么？
+
+不是，因为中断处理程序还没准备好。
 
 ## 开放思考题
 
